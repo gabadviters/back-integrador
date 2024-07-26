@@ -11,8 +11,9 @@ export class UsersService {
 
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>){}
 
- async emailExist(email:string){
-    const user = await this.userRepository.findOne({
+ 
+  async emailExist(email:string){
+    const user =  await this.userRepository.findOne({
       where:{email}
     })
     return user
@@ -20,7 +21,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     
-    if(this.emailExist){
+    if(await this.emailExist(createUserDto.email)){
       throw new BadRequestException("This email is already in use")
     }
 
